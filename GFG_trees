@@ -77,3 +77,40 @@ class Solution {
 //         leftViewUtil(node.right, level + 1, maxLevel, res);
 //     }
 // }
+
+
+112. Given the root of a binary tree and an integer targetSum,
+return true if the tree has a root-to-leaf path such that 
+adding up all the values along the path equals targetSum.
+
+class Solution {
+    public boolean hasPathSum(TreeNode root, int targetSum) {
+        if (root == null) {
+            return false;
+        }
+        
+        if (root.left == null && root.right == null) {
+            return targetSum == root.val;
+        }
+        
+        boolean leftSum = hasPathSum(root.left, targetSum - root.val);
+        boolean rightSum = hasPathSum(root.right, targetSum - root.val);
+        
+        return leftSum || rightSum;
+    }
+}
+
+111. Minimum Depth of Binary Tree
+Given a binary tree, find its minimum depth.
+The minimum depth is the number of nodes along the 
+shortest path    from the root node down to the nearest leaf node
+
+class Solution {
+    public int minDepth(TreeNode root) {
+        if(root == null) return 0;
+
+        if (root.left == null) return 1 + minDepth(root.right);
+        if (root.right == null) return 1 + minDepth(root.left);
+
+        return 1 + Math.min(minDepth(root.left), minDepth(root.right));        
+    }
