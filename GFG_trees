@@ -114,3 +114,121 @@ class Solution {
 
         return 1 + Math.min(minDepth(root.left), minDepth(root.right));        
     }
+
+
+
+You are given a perfect binary tree where all leaves are on the same level, 
+and every parent has two children.
+The binary tree has the following definition:
+struct Node {
+  int val;
+  Node *left;
+  Node *right;
+  Node *next;
+}
+
+Populate each next pointer to point to its next right node. 
+If there is no next right node, the next pointer should be set to NULL.
+Initially, all next pointers are set to NULL.
+
+Example 1:
+Input: root = [1,2,3,4,5,6,7]
+Output: [1,#,2,3,#,4,5,6,7,#]
+Explanation: Given the above perfect binary tree (Figure A), your function should populate each next pointer to point to its next right node, just like in Figure B. The serialized output is in level order as connected by the next pointers, with '#' signifying the end of each level.
+
+class Solution {
+    public Node connect(Node root) {
+        if(root==null) return root;
+
+        Queue<Node> q=new ArrayDeque<>();
+        q.add(root);
+        
+
+        while(!q.isEmpty()){
+            int sizee=q.size();
+            for(int i=0;i<sizee;i++){
+                Node curr=q.poll();
+                if(i<sizee-1)
+                    curr.next=q.peek();
+                else    curr.next=null;
+
+                if(curr.left!=null) q.add(curr.left);
+                if(curr.right!=null) q.add(curr.right);
+            }
+        }
+        return root;
+    }
+}
+
+// class Solution {
+//     public Node connect(Node root) {        
+//          Node temp=root;
+//          totalNode(temp);
+//          return temp;
+//     }
+//     void totalNode(Node root ){
+//         if(root == null)
+//             return;
+
+//         if(root.left != null){
+//             root.left.next = root.right;
+//             if(root.next != null){
+//                 root.right.next = root.next.left;
+//             }
+//         }
+
+
+//         totalNode(root.left);
+//         totalNode(root.right);
+//     }
+// }
+
+
+
+You are given an m x n matrix board containing letters 'X' and 'O', capture regions that are surrounded:
+
+Connect: A cell is connected to adjacent cells horizontally or vertically.
+Region: To form a region connect every 'O' cell.
+Surround: The region is surrounded with 'X' cells if you can connect the region with 'X' cells and none of the region cells are on the edge of the board.
+To capture a surrounded region, replace all 'O's with 'X's in-place within the original 
+board. You do not need to return anything.
+
+Example 1:
+Input: board = [["X","X","X","X"],["X","O","O","X"],["X","X","O","X"],["X","O","X","X"]]
+Output: [["X","X","X","X"],["X","X","X","X"],["X","X","X","X"],["X","O","X","X"]]
+Example 2:
+board = [["X","X","X"],["X","O","O"],["X","O","X"],["X","X","X"]]
+Output= [["X","X","X"],["X","O","O"],["X","O","X"],["X","X","X"]]
+
+//if any one of the zeroes forming a region, are part of the border, then we should not make them to X
+class Solution {
+    public void solve(char[][] board) {
+        if (board == null || board.length == 0) return;
+        int m = board.length, n = board[0].length;
+
+        for (int i = 0; i < m; i++) {
+            dfs(board, i, 0);
+            dfs(board, i, n - 1);
+        }
+        for (int j = 0; j < n; j++) {
+            dfs(board, 0, j); 
+            dfs(board, m - 1, j);
+        }
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (board[i][j] == 'O') board[i][j] = 'X';
+                if (board[i][j] == '#') board[i][j] = 'O';
+            }
+        }
+    }
+    private void dfs(char[][] board, int i, int j) {
+        if (i<0 || j<0 || i >= board.length || j >=board[0].length|| board[i][j]!= 'O') return;
+
+        board[i][j] = '#';
+        dfs(board, i + 1, j);
+        dfs(board, i - 1, j);
+        dfs(board, i, j + 1);
+        dfs(board, i, j - 1);
+    }
+}
